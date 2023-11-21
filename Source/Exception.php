@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Hoa
  *
@@ -36,33 +34,44 @@ declare(strict_types=1);
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Exception;
+namespace igorora\Exception;
 
-use Hoa\Consistency;
-use Hoa\Event;
+use igorora\Event\Event;
+use igorora\Event\Bucket;
+use igorora\Event\Source;
+use igorora\Consistency\Consistency;
 
 /**
- * Each exception must extend `Hoa\Exception\Exception`.
+ * Class \igorora\Exception\Exception.
+ *
+ * Each exception must extend \igorora\Exception\Exception.
+ *
+ * @copyright  Copyright © 2007-2017 Hoa community
+ * @license    New BSD License
  */
-class Exception extends Idle implements Event\Source
+class Exception extends Idle implements Source
 {
     /**
-     * Allocates a new exception.
-     *
+     * Create an exception.
      * An exception is built with a formatted message, a code (an ID), and an
      * array that contains the list of formatted string for the message. If
-     * chaining, a previous exception can be added.
+     * chaining, we can add a previous exception.
+     *
+     * @param   string      $message      Formatted message.
+     * @param   int         $code         Code (the ID).
+     * @param   array       $arguments    Arguments to format message.
+     * @param   \Throwable  $previous     Previous exception in chaining.
      */
     public function __construct(
-        string $message,
-        int $code            = 0,
-        $arguments           = [],
-        \Throwable $previous = null
+        $message,
+        $code      = 0,
+        $arguments = [],
+        $previous  = null
     ) {
         parent::__construct($message, $code, $arguments, $previous);
 
-        if (false === Event::eventExists('hoa://Event/Exception')) {
-            Event::register('hoa://Event/Exception', __CLASS__);
+        if (false === Event::eventExists('igorora://Event/Exception')) {
+            Event::register('igorora://Event/Exception', __CLASS__);
         }
 
         $this->send();
@@ -71,19 +80,23 @@ class Exception extends Idle implements Event\Source
     }
 
     /**
-     * Sends the exception on `hoa://Event/Exception`.
+     * Send the exception on igorora://Event/Exception.
+     *
+     * @return  void
      */
-    public function send(): void
+    public function send()
     {
         Event::notify(
-            'hoa://Event/Exception',
+            'igorora://Event/Exception',
             $this,
-            new Event\Bucket($this)
+            new Bucket($this)
         );
+
+        return;
     }
 }
 
 /**
  * Flex entity.
  */
-Consistency::flexEntity(Exception::class);
+Consistency::flexEntity('igorora\Exception\Exception');

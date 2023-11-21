@@ -17,7 +17,7 @@ os:
   - linux
 
 notifications:
-  irc: "chat.freenode.net#hoaproject"
+  irc: "chat.freenode.net#igororaproject"
 
 sudo: false
 
@@ -37,8 +37,8 @@ before_script:
 
 script:
   - composer install
-  - vendor/bin/hoa test:run
+  - vendor/bin/igorora test:run
   - if [[ $ENABLE_DEVTOOLS ]]; then
       composer global require friendsofphp/php-cs-fixer;
-      vendor/bin/hoa devtools:cs --diff --dry-run .;
+      vendor/bin/igorora devtools:cs --diff --dry-run .;
     fi

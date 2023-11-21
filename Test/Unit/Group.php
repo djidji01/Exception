@@ -36,13 +36,13 @@ declare(strict_types=1);
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Exception\Test\Unit;
+namespace igorora\Exception\Test\Unit;
 
-use Hoa\Exception\Group as SUT;
-use Hoa\Test;
+use igorora\Exception\Group as SUT;
+use igorora\Test;
 
 /**
- * Class \Hoa\Exception\Test\Unit\Group.
+ * Class \igorora\Exception\Test\Unit\Group.
  *
  * Test suite of the group class.
  *
@@ -56,7 +56,7 @@ class Group extends Test\Unit\Suite
             ->when($result = new SUT('foo'))
             ->then
                 ->object($result)
-                    ->isInstanceOf('Hoa\Exception\Exception')
+                    ->isInstanceOf('igorora\Exception\Exception')
                     ->isInstanceOf('ArrayAccess')
                     ->isInstanceOf('IteratorAggregate')
                     ->isInstanceOf('Countable');

@@ -36,14 +36,14 @@ declare(strict_types=1);
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Exception\Test\Unit;
+namespace igorora\Exception\Test\Unit;
 
-use Hoa\Event;
-use Hoa\Exception\Exception as SUT;
-use Hoa\Test;
+use igorora\Event;
+use igorora\Exception\Exception as SUT;
+use igorora\Test;
 
 /**
- * Class \Hoa\Exception\Test\Unit\Exception.
+ * Class \igorora\Exception\Test\Unit\Exception.
  *
  * Test suite of the exception class.
  *
@@ -57,14 +57,14 @@ class Exception extends Test\Unit\Suite
             ->when($result = new SUT('foo'))
             ->then
                 ->object($result)
-                    ->isInstanceOf('Hoa\Exception\Idle');
+                    ->isInstanceOf('igorora\Exception\Idle');
     }
 
     public function case_event_is_registered(): void
     {
         $this
             ->given(new SUT('foo'))
-            ->when($result = Event::eventExists('hoa://Event/Exception'))
+            ->when($result = Event::eventExists('igorora://Event/Exception'))
             ->then
                 ->boolean($result)
                     ->isTrue();
@@ -76,13 +76,13 @@ class Exception extends Test\Unit\Suite
 
         $this
             ->given(
-                Event::getEvent('hoa://Event/Exception')->attach(
+                Event::getEvent('igorora://Event/Exception')->attach(
                     function (Event\Bucket $bucket) use ($self, &$called): void {
                         $called = true;
 
                         $self
                             ->object($bucket->getSource())
-                                ->isInstanceOf('Hoa\Exception\Exception')
+                                ->isInstanceOf('igorora\Exception\Exception')
                             ->string($bucket->getSource()->getMessage())
                                 ->isEqualTo('foo')
                             ->object($bucket->getData())

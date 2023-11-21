@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Hoa
  *
@@ -36,21 +34,32 @@ declare(strict_types=1);
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Exception;
+namespace igorora\Exception;
 
 /**
+ * Class \igorora\Exception\Error.
+ *
  * This exception is the equivalent representation of PHP errors.
+ *
+ * @copyright  Copyright © 2007-2017 Hoa community
+ * @license    New BSD License
  */
 class Error extends Exception
 {
     /**
-     * Allocate a new error exception.
+     * Constructor.
+     *
+     * @param   string  $message    Message.
+     * @param   int     $code       Code (the ID).
+     * @param   string  $file       File.
+     * @param   int     $line       Line.
+     * @param   array   $trace      Trace.
      */
     public function __construct(
-        string $message,
-        int $code,
-        string $file,
-        int $line,
+        $message,
+        $code,
+        $file,
+        $line,
         array $trace = []
     ) {
         $this->file   = $file;
@@ -63,16 +72,19 @@ class Error extends Exception
     }
 
     /**
-     * Enables error handler: Transforms a PHP error into a `Hoa\Exception\Error` instance.
+     * Enable error handler: Transform PHP error into `\igorora\Exception\Error`.
+     *
+     * @param   bool  $enable    Enable.
+     * @return  mixed
      */
-    public static function enableErrorHandler(bool $enable = true)
+    public static function enableErrorHandler($enable = true)
     {
         if (false === $enable) {
             return restore_error_handler();
         }
 
         return set_error_handler(
-            function ($no, $str, $file = null, $line = null, $ctx = null): void {
+            function ($no, $str, $file = null, $line = null, $ctx = null) {
                 if (0 === ($no & error_reporting())) {
                     return;
                 }

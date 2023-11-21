@@ -36,13 +36,13 @@ declare(strict_types=1);
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Exception\Test\Unit;
+namespace igorora\Exception\Test\Unit;
 
-use Hoa\Exception\Idle as SUT;
-use Hoa\Test;
+use igorora\Exception\Idle as SUT;
+use igorora\Test;
 
 /**
- * Class \Hoa\Exception\Test\Unit\Idle.
+ * Class \igorora\Exception\Test\Unit\Idle.
  *
  * Test suite of the idle exception.
  *

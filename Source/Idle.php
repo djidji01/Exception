@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Hoa
  *
@@ -36,53 +34,72 @@ declare(strict_types=1);
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Exception;
+namespace igorora\Exception;
 
 /**
- * `Hoa\Exception\Idle` is the mother exception class of libraries. The only
- * difference between `Hoa\Exception\Idle` and its direct children
- * `Hoa\Exception` is that the latter fires events after beeing constructed.
+ * Class \igorora\Exception\Idle.
+ *
+ * `\igorora\Exception\Idle` is the mother exception class of libraries. The only
+ * difference between `\igorora\Exception\Idle` and its directly child
+ * `\igorora\Exception` is that the latter fires events after beeing constructed.
+ *
+ * @copyright  Copyright © 2007-2017 Hoa community
+ * @license    New BSD License
  */
 class Idle extends \Exception
 {
     /**
      * Delay processing on arguments.
+     *
+     * @var array
      */
     protected $_tmpArguments = null;
 
     /**
-     * List of arguments to format message.
+     * Arguments to format message.
+     *
+     * @var array
      */
     protected $_arguments    = null;
 
     /**
      * Backtrace.
+     *
+     * @var array
      */
     protected $_trace        = null;
 
     /**
-     * Previous exception if any.
+     * Previous.
+     *
+     * @var \Exception
      */
     protected $_previous     = null;
 
     /**
-     * Original exception message.
+     * Original message.
+     *
+     * @var string
      */
     protected $_rawMessage   = null;
 
 
 
     /**
-     * Allocates a new exception.
-     *
+     * Create an exception.
      * An exception is built with a formatted message, a code (an ID) and an
      * array that contains the list of formatted strings for the message. If
      * chaining, we can add a previous exception.
+     *
+     * @param   string      $message      Formatted message.
+     * @param   int         $code         Code (the ID).
+     * @param   array       $arguments    Arguments to format message.
+     * @param   \Exception  $previous     Previous exception in chaining.
      */
     public function __construct(
-        string $message,
-        int $code            = 0,
-        $arguments           = [],
+        $message,
+        $code = 0,
+        $arguments = [],
         \Exception $previous = null
     ) {
         $this->_tmpArguments = $arguments;
@@ -94,11 +111,12 @@ class Idle extends \Exception
     }
 
     /**
-     * Returns the backtrace.
+     * Get the backtrace.
+     * Do not use \Exception::getTrace() any more.
      *
-     * Do not use `Exception::getTrace` any more.
+     * @return  array
      */
-    public function getBacktrace(): ?array
+    public function getBacktrace()
     {
         if (null === $this->_trace) {
             $this->_trace = $this->getTrace();
@@ -108,11 +126,12 @@ class Idle extends \Exception
     }
 
     /**
-     * Returns the previous exception if any.
+     * Get previous.
+     * Do not use \Exception::getPrevious() any more.
      *
-     * Do not use `Exception::getPrevious` any more.
+     * @return  \Exception
      */
-    public function getPreviousThrow(): ?\Exception
+    public function getPreviousThrow()
     {
         if (null === $this->_previous) {
             $this->_previous = $this->getPrevious();
@@ -122,9 +141,11 @@ class Idle extends \Exception
     }
 
     /**
-     * Returns the arguments of the message.
+     * Get arguments for the message.
+     *
+     * @return  array
      */
-    public function getArguments(): ?array
+    public function getArguments()
     {
         if (null === $this->_arguments) {
             $arguments = $this->_tmpArguments;
@@ -147,25 +168,31 @@ class Idle extends \Exception
     }
 
     /**
-     * Returns the raw message.
+     * Get the raw message.
+     *
+     * @return  string
      */
-    public function getRawMessage(): string
+    public function getRawMessage()
     {
         return $this->_rawMessage;
     }
 
     /**
-     * Returns the message already formatted.
+     * Get the message already formatted.
+     *
+     * @return  string
      */
-    public function getFormattedMessage(): string
+    public function getFormattedMessage()
     {
         return $this->getMessage();
     }
 
     /**
-     * Returns the source of the exception (class, method, function, main etc.).
+     * Get the source of the exception (class, method, function, main etc.).
+     *
+     * @return  string
      */
-    public function getFrom(): string
+    public function getFrom()
     {
         $trace = $this->getBacktrace();
         $from  = '{main}';
@@ -187,9 +214,12 @@ class Idle extends \Exception
     }
 
     /**
-     * Raises an exception as a string.
+     * Raise an exception as a string.
+     *
+     * @param   bool    $previous    Whether raise previous exception if exists.
+     * @return  string
      */
-    public function raise(bool $includePrevious = false): string
+    public function raise($previous = false)
     {
         $message = $this->getFormattedMessage();
         $trace   = $this->getBacktrace();
@@ -198,8 +228,8 @@ class Idle extends \Exception
         $pre     = $this->getFrom();
 
         if (!empty($trace)) {
-            $file = $trace['file'] ?? null;
-            $line = $trace['line'] ?? null;
+            $file = isset($trace['file']) ? $trace['file'] : null;
+            $line = isset($trace['line']) ? $trace['line'] : null;
         }
 
         $pre .= ': ';
@@ -214,24 +244,30 @@ class Idle extends \Exception
                 $pre . '(' . $this->getCode() . ') ' . $message . "\n" .
                 'in ' . $file . ' around line ' . $line . '.';
         }
+        
 
-        if (true === $includePrevious &&
-            null !== $previous = $this->getPreviousThrow()) {
-            $out .=
-                "\n\n" . '    ⬇' . "\n\n" .
-                'Nested exception (' . get_class($previous) . '):' . "\n" .
-                ($previous instanceof self
-                    ? $previous->raise(true)
-                    : $previous->getMessage());
+        if (true === $previous) {
+            if (null !== $previous = $this->getPreviousThrow()) {
+                $out .=
+                    "\n\n" . '    ⬇' . "\n\n" .
+                    'Nested exception (' . get_class($previous) . '):' . "\n" .
+                    ($previous instanceof self
+                        ? $previous->raise(true)
+                        : $previous->getMessage());
+            }
         }
 
         return $out;
     }
 
     /**
-     * Catches uncaught exception (only `Hoa\Exception\Idle` and children).
+     * Catch uncaught exception (only \igorora\Exception\Idle and children).
+     *
+     * @param   \Throwable  $exception    The exception.
+     * @return  void
+     * @throws  \Throwable
      */
-    public static function uncaught(\Throwable $exception): void
+    public static function uncaught($exception)
     {
         if (!($exception instanceof self)) {
             throw $exception;
@@ -244,22 +280,28 @@ class Idle extends \Exception
         echo
             'Uncaught exception (' . get_class($exception) . '):' . "\n" .
             $exception->raise(true);
+
+        return;
     }
 
     /**
      * String representation of object.
+     *
+     * @return  string
      */
-    public function __toString(): string
+    public function __toString()
     {
         return $this->raise();
     }
 
     /**
-     * Enables uncaught exception handler.
-     *
+     * Enable uncaught exception handler.
      * This is restricted to Hoa's exceptions only.
+     *
+     * @param   bool  $enable    Enable.
+     * @return  mixed
      */
-    public static function enableUncaughtHandler(bool $enable = true)
+    public static function enableUncaughtHandler($enable = true)
     {
         if (false === $enable) {
             return restore_exception_handler();

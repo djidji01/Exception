@@ -36,13 +36,13 @@ declare(strict_types=1);
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Exception\Test\Unit;
+namespace igorora\Exception\Test\Unit;
 
-use Hoa\Exception\Error as SUT;
-use Hoa\Test;
+use igorora\Exception\Error as SUT;
+use igorora\Test;
 
 /**
- * Class \Hoa\Exception\Test\Unit\Error.
+ * Class \igorora\Exception\Test\Unit\Error.
  *
  * Test suite of the error class.
  *
@@ -53,22 +53,22 @@ class Error extends Test\Unit\Suite
     public function case_is_an_exception(): void
     {
         $this
-            ->when($result = new SUT('foo', 42, '/hoa/flatland', 153))
+            ->when($result = new SUT('foo', 42, '/igorora/flatland', 153))
             ->then
                 ->object($result)
-                    ->isInstanceOf('Hoa\Exception\Exception');
+                    ->isInstanceOf('igorora\Exception\Exception');
     }
 
     public function case_get_message(): void
     {
         $this
-            ->given($exception = new SUT('foo', 42, '/hoa/flatland', 153))
+            ->given($exception = new SUT('foo', 42, '/igorora/flatland', 153))
             ->when($result = $exception->raise())
             ->then
                 ->string($result)
                     ->isEqualTo(
                         '{main}: (42) foo' . "\n" .
-                        'in /hoa/flatland at line 153.'
+                        'in /igorora/flatland at line 153.'
                     );
     }
 
@@ -140,7 +140,7 @@ class Error extends Test\Unit\Suite
             ->exception(function (): void {
                 ++$i;
             })
-                ->isInstanceOf('Hoa\Exception\Error')
+                ->isInstanceOf('igorora\Exception\Error')
                 ->hasMessage('Undefined variable: i');
     }
 }

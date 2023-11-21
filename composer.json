@@ -1,43 +1,34 @@
 {
-    "name"       : "hoa/exception",
-    "description": "The Hoa\\Exception library.",
+    "name"       : "igorora/exception",
+    "description": "The igorora/exception fork from Hoa/exception library.",
     "type"       : "library",
     "keywords"   : ["library", "exception"],
-    "homepage"   : "https://hoa-project.net/",
     "license"    : "BSD-3-Clause",
     "authors"    : [
         {
-            "name" : "Ivan Enderlin",
-            "email": "ivan.enderlin@hoa-project.net"
-        },
-        {
-            "name"    : "Hoa community",
-            "homepage": "https://hoa-project.net/"
+            "name": "Djibril MBARUSHIMANA",
+            "email": "djidji01@gmail.com"
         }
     ],
     "support": {
-        "email" : "support@hoa-project.net",
-        "irc"   : "irc://chat.freenode.net/hoaproject",
-        "forum" : "https://users.hoa-project.net/",
-        "docs"  : "https://central.hoa-project.net/Documentation/Library/Exception",
-        "source": "https://central.hoa-project.net/Resource/Library/Exception"
     },
+    "minimum-stability": "dev",
     "require": {
         "php"            : ">=7.1",
-        "hoa/consistency": "dev-master",
-        "hoa/event"      : "dev-master"
+        "igorora/consistency": "dev-main",
+        "igorora/event"      : "dev-main"
     },
     "require-dev": {
-        "hoa/test": "dev-master"
+        "igorora/test": "dev-main"
     },
     "autoload": {
         "psr-4": {
-            "Hoa\\Exception\\": "Source"
+            "igorora\\Exception\\": "Source"
         }
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "2.x-dev"
+            "dev-main": "1.x-dev"
         }
     }
 }
